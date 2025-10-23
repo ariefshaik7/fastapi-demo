@@ -18,6 +18,22 @@ class PostCreate(PostBase):
     """
     pass
 
+class UserOut(BaseModel):
+    """
+    Schema for returning a user (public-facing).
+    """
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    class Config:
+        """
+        Pydantic configuration.
+        
+        orm_mode = True allows this model to be populated from a
+        SQLAlchemy ORM object.
+        """
+        orm_mode = True
 
 class Post(PostBase):
     """
@@ -26,6 +42,7 @@ class Post(PostBase):
     id: int
     created_at: datetime
     owner_id: int
+    owner: UserOut # Inorder for this to work UserOut should be defined before this.
 
     class Config:
         """
@@ -45,22 +62,7 @@ class UserCreate(BaseModel):
     password: str
 
 
-class UserOut(BaseModel):
-    """
-    Schema for returning a user (public-facing).
-    """
-    id: int
-    email: EmailStr
-    created_at: datetime
 
-    class Config:
-        """
-        Pydantic configuration.
-        
-        orm_mode = True allows this model to be populated from a
-        SQLAlchemy ORM object.
-        """
-        orm_mode = True
 
 
 class Token(BaseModel):
