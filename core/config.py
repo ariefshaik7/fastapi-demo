@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     # Define your settings
     DATABASE_URL: str
 
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+
 
 # Create a single, cached instance of the settings
 settings = Settings()

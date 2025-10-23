@@ -4,6 +4,7 @@ from models import models
 from db.session import get_db
 from schemas import schemas
 from typing import List
+import oauth2
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -16,7 +17,11 @@ def get_products(db: Session = Depends(get_db)):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Product)
-def create_products(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+def create_products(
+    product: schemas.ProductCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(oauth2.get_current_user),
+):
 
     new_product = models.Product(**product.model_dump())
     db.add(new_product)
@@ -40,7 +45,11 @@ def get_product(id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_product(id: int, db: Session = Depends(get_db)):
+def delete_product(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(oauth2.get_current_user),
+):
 
     product = db.query(models.Product).filter(models.Product.id == id).first()
 
@@ -57,7 +66,10 @@ def delete_product(id: int, db: Session = Depends(get_db)):
 
 @router.put("/{id}", response_model=schemas.Product)
 def update_product(
-    id: int, updated_product : schemas.ProductCreate, db: Session = Depends(get_db)
+    id: int,
+    updated_product: schemas.ProductCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(oauth2.get_current_user),
 ):
     product = db.query(models.Product).filter(models.Product.id == id).first()
 
@@ -74,4 +86,3 @@ def update_product(
     db.refresh(product)
 
     return product
-
