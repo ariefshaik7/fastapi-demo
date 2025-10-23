@@ -1,0 +1,63 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+*.eggs/
+build/
+dist/
+*.log
+*.pot
+*.mo
+
+# Virtual environment folders
+venv/
+.env/
+.venv/
+env/
+ENV/
+*.sqlite3
+
+# -------------------------
+# Environment & Config
+# -------------------------
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -------------------------
+# OS-generated files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Test / Coverage
+# -------------------------
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+nosetests.xml
+junit.xml
+
+# -------------------------
+# FastAPI & Uvicorn
+# -------------------------
+# Log and runtime files
+*.pid
+*.log
+uvicorn.log
