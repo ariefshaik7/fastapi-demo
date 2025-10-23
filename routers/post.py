@@ -23,7 +23,7 @@ def create_posts(
     current_user: models.User = Depends(oauth2.get_current_user),
 ):
 
-    new_post = models.Post(**post.model_dump())
+    new_post = models.Post(owner_id=current_user.id, **post.model_dump())
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
@@ -59,6 +59,12 @@ def delete_post(
             detail=f"post with {id} does not exist",
         )
 
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to perform requestion action",
+        )
+
     db.delete(post)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -77,6 +83,12 @@ def update_post(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Post with {id} does not exist",
+        )
+    
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to perform requestion action",
         )
 
     for key, value in updated_post.model_dump().items():

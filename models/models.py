@@ -1,9 +1,7 @@
-from db.session import Base
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
-
-
+from db.session import Base
 
 
 class Post(Base):
@@ -16,6 +14,10 @@ class Post(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
+    owner_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"),  nullable=False
+    )
+
 
 class User(Base):
     __tablename__ = "users"
@@ -26,6 +28,3 @@ class User(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
-
-    
-    
