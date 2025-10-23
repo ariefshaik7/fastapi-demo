@@ -2,27 +2,29 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 
-class ProductBase(BaseModel):
+class PostBase(BaseModel):
     """
-    Base schema for a Product.
+    Base schema for a Post.
     """
-    name: str
-    description: str
+    title: str
+    content: str
+    published: bool = True
     # in_stock: bool = True
 
 
-class ProductCreate(ProductBase):
+class PostCreate(PostBase):
     """
-    Schema for creating a new product.
+    Schema for creating a new post.
     """
     pass
 
 
-class Product(ProductBase):
+class Post(PostBase):
     """
-    Schema for reading/returning a product.
+    Schema for reading/returning a post.
     """
     id: int
+    created_at: datetime
 
     class Config:
         """
@@ -38,7 +40,6 @@ class UserCreate(BaseModel):
     """
     Schema for creating a new user.
     """
-    name: str
     email: EmailStr  
     password: str
 
