@@ -9,6 +9,6 @@ def get_posts():
     return 
 
 
-@router.post("/posts")
-def create_posts():
+@router.post("/products")
+def create_products():
     return
