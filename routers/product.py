@@ -3,18 +3,19 @@ from sqlalchemy.orm import Session
 from models import models
 from db.session import get_db
 from schemas import schemas
+from typing import List
 
-router = APIRouter()
+router = APIRouter(prefix="/products", tags=["Products"])
 
 
-@router.get("/products")
+@router.get("/", response_model=List[schemas.Product])
 def get_products(db: Session = Depends(get_db)):
 
     products = db.query(models.Product).all()
     return products
 
 
-@router.post("/products", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Product)
 def create_products(product: schemas.ProductCreate, db: Session = Depends(get_db)):
 
     new_product = models.Product(**product.model_dump())
@@ -24,7 +25,7 @@ def create_products(product: schemas.ProductCreate, db: Session = Depends(get_db
     return new_product
 
 
-@router.get("/products/{id}")
+@router.get("/{id}", response_model=schemas.Product)
 def get_product(id: int, db: Session = Depends(get_db)):
 
     product = db.query(models.Product).filter(models.Product.id == id).first()
@@ -38,7 +39,7 @@ def get_product(id: int, db: Session = Depends(get_db)):
     return product
 
 
-@router.delete("/products/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(id: int, db: Session = Depends(get_db)):
 
     product = db.query(models.Product).filter(models.Product.id == id).first()
@@ -54,7 +55,7 @@ def delete_product(id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/products/{id}")
+@router.put("/{id}", response_model=schemas.Product)
 def update_product(
     id: int, updated_product : schemas.ProductCreate, db: Session = Depends(get_db)
 ):
